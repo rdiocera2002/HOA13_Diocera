@@ -1,0 +1,9 @@
+# /etc/etcd/etcd.conf
+
+ETCD_NAME="{{ ansible_host }}
+
+# Specify the listening interface and port
+ETCD_LISTEN_CLIENT_URLS="http://0.0.0.0:2379"
+
+# Specify the advertised URL to be used for client connections
+ETCD_ADVERTISE_CLIENT_URLS="http://{{ ansible_host }}:2379"

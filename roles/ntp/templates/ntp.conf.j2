@@ -1,0 +1,15 @@
+# /etc/ntp.conf
+
+# Use servers from the NTP Pool Project
+server 0.pool.ntp.org iburst
+server 1.pool.ntp.org iburst
+server 2.pool.ntp.org iburst
+server 3.pool.ntp.org iburst
+
+# Restrict access to the server
+restrict default kod nomodify notrap nopeer noquery
+restrict -6 default kod nomodify notrap nopeer noquery
+
+# Allow localhost to use the service
+restrict 127.0.0.1
+restrict -6 ::1

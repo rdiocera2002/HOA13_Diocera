@@ -1,0 +1,44 @@
+---
+- name: Install RabbitMQ on Ubuntu
+  apt:
+    name: "{{ item }}"
+    state: present
+  loop:
+    - rabbitmq-server
+    - python3-pika
+  when: ansible_distribution == "Ubuntu"
+
+- name: Install RabbitMQ on CentOS
+  yum:
+    name: "{{ item }}"
+    state: present
+    use_backend: dnf4
+  loop:
+    - rabbitmq-server
+    - python36-pika
+  when: ansible_distribution == "CentOS"
+
+- name: Start and enable RabbitMQ service
+  service:
+    name: rabbitmq-server
+    state: started
+    enabled: yes
+
+- name: Ensure RabbitMQ OpenStack vhost exists
+  rabbitmq_vhost:
+    name: "/openstack"
+    state: present
+
+- name: Create RabbitMQ OpenStack user and vhost
+  rabbitmq_user:
+    user: "{{ rabbitmq_user }}"
+    password: "{{ rabbitmq_password }}"
+    vhost: "{{ rabbitmq_vhost }}"
+    configure_priv: '.*'
+    write_priv: '.*'
+    read_priv: '.*'
+    state: present
+  vars:
+    rabbitmq_user: 'openstack'
+    rabbitmq_password: '2111419'
+    rabbitmq_vhost: '/openstack'

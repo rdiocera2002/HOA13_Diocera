@@ -1,0 +1,19 @@
+---
+- name: Install NTP on Ubuntu
+  apt:
+    name: ntp
+    state: present
+  when: ansible_distribution == "Ubuntu"
+
+- name: Install NTP on CentOS
+  dnf:
+    name: ntp
+    state: present
+    use_backend: dnf4
+  when: ansible_distribution == "CentOS"
+
+- name: Configure NTP servers
+  template:
+    src: ntp.conf.j2
+    dest: /etc/ntp.conf
+  notify: Restart NTP service

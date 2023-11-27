@@ -1,0 +1,40 @@
+---
+- name: Install etcd on Ubuntu
+  apt:
+    name: "{{ item }}"
+    state: present
+  loop:
+    - etcd
+    - etcd-discovery
+    - python3-etcd
+    - python3-etcd3
+    - python3-etcd3gw
+  when: ansible_distribution == "Ubuntu"
+
+- name: Install etcd on CentOS
+  yum:
+    name: "{{ item }}"
+    state: present
+    use_backend: dnf4
+  loop:
+    - etcd
+    - puppet-etcd
+    - python2-etcd3gw
+  when: ansible_distribution == "CentOS"
+
+- name: Start and enable etcd service
+  service:
+    name: etcd
+    state: started
+    enabled: yes
+
+- name: Ensure etcd directory exists
+  file:
+    path: /etc/etcd
+    state: directory
+
+- name: Configure etcd
+  template:
+    src: etcd.conf.j2
+    dest: /etc/etcd/etcd.conf
+  notify: Restart etcd service

@@ -1,0 +1,60 @@
+---
+- hosts: all
+  become: true
+  pre_tasks:
+
+  - name: Update repository Index (CentOS)
+    tags: always
+    yum:
+      update_cache: yes
+    changed_when: false
+    when: ansible_distribution == "CentOS"
+
+  - name: Install Updates (Ubuntu)
+    tags: always
+    apt:
+      update_cache: yes
+    changed_when: false
+    when: ansible_distribution == "Ubuntu"
+
+  - name: Install packages on Ubuntu for OpenStack base Services
+    apt:
+      name:
+        - vim
+        - htop
+        - curl
+        - wget
+      state: present
+    when: ansible_distribution == "Ubuntu"
+
+  - name: Install packages on CentOS for OpenStack base services
+    yum:
+      name:
+        - vim
+        - htop
+        - curl
+        - wget
+      state: present
+      use_backend: dnf4
+    when: ansible_distribution == "CentOS"
+
+- hosts: ubuntu
+  become: true
+  roles:
+    - ntp
+    - openstack_packages
+    - sqldatabase
+    - message_queue
+    - memcached
+    - etcd
+
+#- hosts: centos
+ # become: true
+ # roles:
+  #  - ntp
+   # - openstack_packages
+   # - sqldatabase
+   # - message_queue
+   # - memcached
+   # - etcd
+

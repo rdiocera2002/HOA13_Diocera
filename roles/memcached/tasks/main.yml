@@ -1,0 +1,31 @@
+---
+- name: Install Memcached on Ubuntu
+  apt:
+    name: "{{ item }}"
+    state: present
+  loop:
+    - memcached
+    - python3-memcache
+  when: ansible_distribution == "Ubuntu"
+
+- name: Install Memcached on CentOS
+  yum:
+    name: "{{ item }}"
+    state: present
+    use_backend: dnf4
+  loop:
+    - memcached
+    - python-memcached
+  when: ansible_distribution == "CentOS"
+
+- name: Start and enable Memcached service
+  service:
+    name: memcached
+    state: started
+    enabled: yes
+
+- name: Configure Memcached for OpenStack
+  template:
+    src: memcached.conf.j2
+    dest: /etc/memcached.conf
+  notify: Restart Memcached service

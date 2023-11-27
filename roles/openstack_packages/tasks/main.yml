@@ -1,0 +1,45 @@
+---
+- name: Install OpenStack packages on Ubuntu
+  apt:
+    name: "{{ item }}"
+    state: present
+  loop:
+    - python3-openstackclient
+    - keystone
+    - glance
+    - nova-api
+    - nova-conductor
+    - nova-novncproxy
+    - nova-scheduler
+    - neutron-server
+    - neutron-linuxbridge-agent
+    - neutron-dhcp-agent
+    - neutron-metadata-agent
+    - neutron-l3-agent
+  when: ansible_distribution == "Ubuntu"
+
+- name: Install RDO Repository on CentOS
+  become: true
+  shell: dnf install -y https://rdoproject.org/repos/rdo-release.rpm
+  when: ansible_distribution == "CentOS"
+
+- name: Install OpenStack packages on CentOS
+  yum:
+    name: "{{ item }}"
+    state: present
+    use_backend: dnf4
+  loop:
+    - python-openstackclient
+    - openstack-keystone
+    - openstack-glance
+    - openstack-nova-api
+    - openstack-nova-conductor
+    - openstack-nova-console
+    - openstack-nova-novncproxy
+    - openstack-nova-scheduler
+    - openstack-neutron
+    - openstack-neutron-linuxbridge
+    - openstack-neutron-fwaas
+    - openstack-neutron-bgp-dragent
+    - openstack-neutron-dynamic-routing-common
+  when: ansible_distribution == "CentOS"

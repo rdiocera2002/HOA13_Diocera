@@ -1,0 +1,16 @@
+# /etc/memcached.conf
+
+# Use this file to configure your memcached instance.
+
+# Default connection settings
+-l 127.0.0.1
+-p 11211
+
+# Limit the maximum size of the cache in megabytes
+-m 512
+
+# Use a specific user to run the daemon
+-u memcache
+
+# Specify the maximum number of connections
+-c 1024

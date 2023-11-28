@@ -38,23 +38,23 @@
       use_backend: dnf4
     when: ansible_distribution == "CentOS"
 
-- hosts: ubuntu
+#- hosts: ubuntu
+ # become: true
+ # roles:
+ #   - ntp
+ #   - openstack_packages
+ #   - sqldatabase
+ #   - message_queue
+ #   - memcached
+ #   - etcd
+
+- hosts: centos_openstack
   become: true
   roles:
     - ntp
     - openstack_packages
-    - sqldatabase
+   # - sqldatabase
     - message_queue
     - memcached
     - etcd
-
-#- hosts: centos
- # become: true
- # roles:
-  #  - ntp
-   # - openstack_packages
-   # - sqldatabase
-   # - message_queue
-   # - memcached
-   # - etcd
 

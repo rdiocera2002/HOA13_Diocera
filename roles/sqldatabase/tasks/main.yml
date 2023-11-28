@@ -35,7 +35,7 @@
     login_password: "2111419.!"
     login_unix_socket: "{{ mysql_unix_socket }}"
   vars:
-    mysql_unix_socket: "/var/run/mysqld/mysqld.sock"
+    mysql_unix_socket: "/var/lib/mysql/mysql.sock"
 
 - name: Create OpenStack databases and users
   mysql_db:
